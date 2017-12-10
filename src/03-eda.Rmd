@@ -1,0 +1,69 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+``` {r setup}
+knitr::opts_knit$set(root.dir = '~/personal/walmartrecruiting/data')
+```
+
+
+
+Visualizacion de 1 variable 
+``` {r warning=FALSE}
+library(tidyverse)
+
+train_data <- readRDS('train_data_tidy.rds')
+train_data <- train_data %>% 
+                mutate_at(vars(TripType, VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
+
+ggplot(train_data, aes(TripType)) +
+  geom_bar()
+
+ggplot(train_data, aes(Weekday)) +
+  geom_bar()
+
+ggplot(train_data, aes(DepartmentDescription)) +
+  geom_bar() +
+  coord_flip() +
+  theme(text = element_text(size=8)) 
+
+ggplot(train_data, aes(ScanCount)) +
+   geom_area(stat = "bin") 
+  
+
+```
+
+Visualizacion de datos categoricos vs datos categoricos
+``` {r warning=FALSE}
+
+ggplot(train_data, aes(Weekday, TripType)) +
+  geom_count()
+
+ggplot(train_data, aes(TripType, DepartmentDescription)) +
+  geom_count() +
+  theme(text = element_text(size=8)) 
+
+ggplot(train_data, aes(Weekday, DepartmentDescription)) +
+  geom_count() +
+  theme(text = element_text(size=8)) 
+
+
+```
+
+Visualizacion de datos categoricos vs datos numericos
+``` {r }
+
+ggplot(train_data, aes(Weekday, ScanCount)) +
+  geom_boxplot()
+
+ggplot(train_data, aes(TripType, ScanCount)) +
+  geom_boxplot()
+
+ggplot(train_data, aes(DepartmentDescription, ScanCount)) +
+  geom_boxplot() +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+```
+

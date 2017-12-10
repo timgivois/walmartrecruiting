@@ -57,16 +57,6 @@ plotAllNumeric <- function(data){
 #categorical
 # data %>% mutate_if(is.character, as.factor)
 
-plotAllCategorical <- function(data){
-  data %>%
-    keep(is.character) %>% 
-    gather() %>% 
-    ggplot(aes(value)) +
-    facet_wrap(~ key, scales = "free") +
-    geom_bar()
-  
-}
-
 boxplot_two_var <- function(data, col1=1, col2=4){
   aux1 <- data %>% 
     keep(is.numeric) %>%

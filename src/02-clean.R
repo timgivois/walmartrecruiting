@@ -1,23 +1,22 @@
+source('src/01-prepare.R')
 
-# Llevamos todas las variables categoricas como factor 
-walmart <- train_data %>% 
-                mutate_at(vars(TripType, VisitNumber, Weekday, Upc), funs(as.factor))
+train_data <- train_data %>% 
+                mutate_at(vars(TripType, VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
+test_data <- test_data %>% 
+  mutate_at(vars( VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
 
-glimpse(walmart)
-summary(walmart)
-
-
+glimpse(train_data)
+summary(train_data)
 
 #visualizando valores faltantes
-print(paste("numero de filas con casos faltantes: ", nrow(walmart[!complete.cases(walmart),]), sep=" "))
-apply(walmart, 2, function(x) sum(is.na(x)))
-
+print(paste("numero de filas con casos faltantes: ", nrow(train_data[!complete.cases(train_data),]), sep=" "))
+apply(train_data, 2, function(x) sum(is.na(x)))
 
 ######################
 ###--- Discoveringcorrelations with missing data
-x <- as.data.frame(abs(is.na(walmart))) # df es un data.frame
+x <- as.data.frame(abs(is.na(train_data))) # df es un data.frame
 
-head(walmart)
+head(train_data)
 head(x)
 
 # Extrae las variables que tienen algunas celdas con NAs
@@ -27,15 +26,15 @@ y <- x[which(sapply(x, sd) > 0)]
 cor(y) 
 
 #saving data with missing values
-na_walmart <- walmart[!complete.cases(walmart),]
-head(na_walmart)
+na_train_data <- train_data[!complete.cases(train_data),]
+head(na_train_data)
 
 
 
 ###############################
 ###---imputando con missing data
 library(missForest)
-temp <- walmart %>% select(TripType, Weekday, ScanCount, DepartmentDescription) %>% 
+temp <- train_data %>% select(TripType, Weekday, ScanCount, DepartmentDescription) %>% 
   mutate(DepartmentDescription = replace(DepartmentDescription, DepartmentDescription=="null", NA)) %>%
   mutate_at(vars(TripType, Weekday, ScanCount, DepartmentDescription), funs(as.factor))
 
@@ -44,7 +43,7 @@ temp %>% filter(DepartmentDescription == "null")
 
 ####
 
-walmart.imp <- missForest(data.frame(select(temp, c(TripType, ScanCount, DepartmentDescription)))) 
+train_data.imp <- missForest(data.frame(select(temp, c(TripType, ScanCount, DepartmentDescription)))) 
 
 temp <- DMwR::knnImputation(temp, k=3)  # perform knn imputation.
 anyNA(knnOutput)
@@ -63,4 +62,11 @@ plotDepartment <- function(data, column="DepartmentDescription"){
   par(op)
 }
 plotDepartment(temp)
+
+summary(train_data)
+summary(test_data)
+
+
+saveRDS(train_data, 'data/train_data_tidy.rds')
+saveRDS(test_data, 'data/test_data_tidy.rds')
 
