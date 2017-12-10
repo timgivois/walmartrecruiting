@@ -1,6 +1,6 @@
 rm(list=ls())
-#setwd("~/personal/walmartrecruiting")
-setwd("~/Documents/mineria Datos/walmartrecruiting")
+setwd("~/personal/walmartrecruiting")
+#setwd("~/Documents/mineria Datos/walmartrecruiting")
 
 source("src/metadata.R", local=T)
 source("src/utils.R")
