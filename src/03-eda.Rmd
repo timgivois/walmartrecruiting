@@ -4,7 +4,7 @@ output:
   pdf_document: default
 ---
 ``` {r setup}
-knitr::opts_knit$set(root.dir = '~/personal/walmartrecruiting/data')
+knitr::opts_knit$set(root.dir = "/home/farid/Documents/mineria Datos/walmartrecruiting")
 ```
 
 
@@ -13,31 +13,133 @@ Visualizacion de 1 variable
 ``` {r warning=FALSE}
 library(tidyverse)
 
-train_data <- readRDS('train_data_tidy.rds')
+train_data <- readRDS("data/train_data_tidy.rds")
 train_data <- train_data %>% 
                 mutate_at(vars(TripType, VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
 
-ggplot(train_data, aes(TripType)) +
-  geom_bar()
-
-ggplot(train_data, aes(Weekday)) +
-  geom_bar()
-
-ggplot(train_data, aes(DepartmentDescription)) +
-  geom_bar() +
+train_data %>%
+    group_by(TripType) %>%
+    dplyr::summarise(counts=n()) %>%
+    arrange(counts) %>%
+    mutate(TripType = factor(TripType, TripType)) %>%
+  ggplot(aes(x=TripType, y=counts)) +
+  geom_bar(stat="identity") +
   coord_flip() +
-  theme(text = element_text(size=8)) 
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
 
-ggplot(train_data, aes(ScanCount)) +
-   geom_area(stat = "bin") 
-  
+train_data %>%
+    group_by(Weekday) %>%
+    dplyr::summarise(counts=n()) %>%
+    arrange(counts) %>%
+    mutate(Weekday = factor(Weekday, Weekday)) %>%
+  ggplot(aes(x=Weekday, y=counts)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+train_data %>%
+    group_by(DepartmentDescription) %>%
+    dplyr::summarise(counts=n()) %>%
+    arrange(counts) %>%
+    mutate(DepartmentDescription = factor(DepartmentDescription, DepartmentDescription)) %>%
+  ggplot(aes(x=DepartmentDescription, y=counts)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+train_data %>%
+    #filter(ScanCount < 0) %>%
+    group_by(ScanCount) %>%
+    dplyr::summarise(counts=n()) %>%
+    arrange(counts) %>%
+    mutate(ScanCount = factor(ScanCount, ScanCount)) %>%
+  ggplot(aes(x=ScanCount, y=counts)) +
+  geom_bar(stat="identity") +
+  scale_y_log10() + 
+  coord_flip() +
+  ylab("log(count)") +
+  ggtitle("ScanCount") +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+train_data %>%
+    group_by(FinelineNumber) %>%
+    dplyr::summarise(counts=n()) %>%
+    filter(counts > 1500) %>%
+    arrange(counts) %>%
+    mutate(FinelineNumber = factor(FinelineNumber, FinelineNumber)) %>%
+  ggplot(aes(x=FinelineNumber, y=counts)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  ggtitle(paste("Different products", unique(train_data$FinelineNumber),sep=" ")) +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+
+train_data %>%
+    group_by(VisitNumber) %>%
+    dplyr::summarise(counts=n()) %>%
+    filter(counts > 100) %>%
+    arrange(counts) %>%
+    mutate(VisitNumber = factor(VisitNumber, VisitNumber)) %>%
+  ggplot(aes(x=VisitNumber, y=counts)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  ggtitle(paste("Different visit number", unique(train_data$VisitNumber),sep=" ")) +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+train_data %>%
+    group_by(Upc) %>%
+    dplyr::summarise(counts=n()) %>%
+    filter(counts > 1000) %>%
+    arrange(counts) %>%
+    mutate(Upc = factor(Upc, Upc)) %>%
+  ggplot(aes(x=Upc, y=counts)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  ggtitle(paste("Upc: ", length(unique(train_data$Upc)),sep=" ")) +
+   theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1)) 
+
+train_data %>%
+    group_by(VisitNumber) %>%
+    dplyr::summarise(counts=n()) %>% 
+    #filter(counts>500) %>% 
+    arrange(-counts)
+
+print(paste("Visit Number: ", unique(train_data$VisitNumber) %>% length, " -of- ", length(train_data$VisitNumber)))
+print(paste("Upc: ", unique(train_data$Upc) %>% length, " -of- ", length(train_data$Upc)))
+print(dim(train_data))
+
+```
+
+Proporciones por variable
+``` {r }
+train_data %>%
+    group_by(TripType) %>%
+    dplyr::summarise(n=n()) %>%
+arrange(desc(n))
+
+train_data %>%
+    group_by(TripType) %>%
+    dplyr::summarise(counts=n()) %>%
+    arrange(desc(counts)) %>%
+    mutate(TripType = factor(TripType, TripType)) %>%
+  ggplot(aes(x=TripType, y=counts)) +
+  geom_bar(stat="identity") +
+   theme(text = element_text(size=8),
+   axis.text.x = element_text(angle=90, hjust=1)) 
 
 ```
 
 Visualizacion de datos categoricos vs datos categoricos
 ``` {r warning=FALSE}
 
-ggplot(train_data, aes(Weekday, TripType)) +
+ggplot(train_data, aes(TripType, Weekday)) +
   geom_count()
 
 ggplot(train_data, aes(TripType, DepartmentDescription)) +
