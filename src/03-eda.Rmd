@@ -4,7 +4,8 @@ output:
   pdf_document: default
 ---
 ``` {r setup}
-knitr::opts_knit$set(root.dir = "/home/farid/Documents/mineria Datos/walmartrecruiting")
+#knitr::opts_knit$set(root.dir = '/home/farid/Documents/mineria Datos/walmartrecruiting')
+knitr::opts_knit$set(root.dir = '~/personal/walmartrecruiting')
 ```
 
 
@@ -13,7 +14,7 @@ Visualizacion de 1 variable
 ``` {r warning=FALSE}
 library(tidyverse)
 
-train_data <- readRDS("data/train_data_tidy.rds")
+train_data <- readRDS('data/train_data_tidy.rds')
 train_data <- train_data %>% 
                 mutate_at(vars(TripType, VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
 
@@ -23,7 +24,7 @@ train_data %>%
     arrange(counts) %>%
     mutate(TripType = factor(TripType, TripType)) %>%
   ggplot(aes(x=TripType, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
@@ -34,7 +35,7 @@ train_data %>%
     arrange(counts) %>%
     mutate(Weekday = factor(Weekday, Weekday)) %>%
   ggplot(aes(x=Weekday, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
@@ -45,7 +46,7 @@ train_data %>%
     arrange(counts) %>%
     mutate(DepartmentDescription = factor(DepartmentDescription, DepartmentDescription)) %>%
   ggplot(aes(x=DepartmentDescription, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
@@ -57,11 +58,11 @@ train_data %>%
     arrange(counts) %>%
     mutate(ScanCount = factor(ScanCount, ScanCount)) %>%
   ggplot(aes(x=ScanCount, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   scale_y_log10() + 
   coord_flip() +
-  ylab("log(count)") +
-  ggtitle("ScanCount") +
+  ylab('log(count)') +
+  ggtitle('ScanCount') +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
 
@@ -72,9 +73,9 @@ train_data %>%
     arrange(counts) %>%
     mutate(FinelineNumber = factor(FinelineNumber, FinelineNumber)) %>%
   ggplot(aes(x=FinelineNumber, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
-  ggtitle(paste("Different products", unique(train_data$FinelineNumber),sep=" ")) +
+  ggtitle(paste('Different products', unique(train_data$FinelineNumber),sep=' ')) +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
 
@@ -86,9 +87,9 @@ train_data %>%
     arrange(counts) %>%
     mutate(VisitNumber = factor(VisitNumber, VisitNumber)) %>%
   ggplot(aes(x=VisitNumber, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
-  ggtitle(paste("Different visit number", unique(train_data$VisitNumber),sep=" ")) +
+  ggtitle(paste('Different visit number', unique(train_data$VisitNumber),sep=' ')) +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
 
@@ -99,9 +100,9 @@ train_data %>%
     arrange(counts) %>%
     mutate(Upc = factor(Upc, Upc)) %>%
   ggplot(aes(x=Upc, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
-  ggtitle(paste("Upc: ", length(unique(train_data$Upc)),sep=" ")) +
+  ggtitle(paste('Upc: ', length(unique(train_data$Upc)),sep=' ')) +
    theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
 
@@ -111,8 +112,8 @@ train_data %>%
     #filter(counts>500) %>% 
     arrange(-counts)
 
-print(paste("Visit Number: ", unique(train_data$VisitNumber) %>% length, " -of- ", length(train_data$VisitNumber)))
-print(paste("Upc: ", unique(train_data$Upc) %>% length, " -of- ", length(train_data$Upc)))
+print(paste('Visit Number: ', unique(train_data$VisitNumber) %>% length, ' -of- ', length(train_data$VisitNumber)))
+print(paste('Upc: ', unique(train_data$Upc) %>% length, ' -of- ', length(train_data$Upc)))
 print(dim(train_data))
 
 ```
@@ -130,7 +131,7 @@ train_data %>%
     arrange(desc(counts)) %>%
     mutate(TripType = factor(TripType, TripType)) %>%
   ggplot(aes(x=TripType, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
    theme(text = element_text(size=8),
    axis.text.x = element_text(angle=90, hjust=1)) 
 
