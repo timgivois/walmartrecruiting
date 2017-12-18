@@ -18,8 +18,7 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 - [Imputation](#imputation)
 - [Transform](#transform)
 - [Feature Engineering](feature-engineering)
-- [Selection](#selection)
-- [Filtering](#filtering)
+- [Selection/Filtering](#selection)
 - [Pipeline Prediction](#pipeline-prediction)
 - [Measurement](#measurement)
 
