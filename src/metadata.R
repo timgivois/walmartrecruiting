@@ -1,4 +1,4 @@
-unclean_department <- c('girls wear, 4-6x and 7-14', 'health and beauty aids', 'ladieswear', 'menswear', 'optical - frames', 'optical - lenses', 'pharmacy otc', 'pharmacy rx')
+unclean_department <- c('girls wear, 4-6x  and 7-14', 'health and beauty aids', 'ladieswear', 'menswear', 'optical - frames', 'optical - lenses', 'pharmacy otc', 'pharmacy rx')
 clean_department <- c('ladies wear', 'health & beauty', 'ladies wear', 'mens wear', 'optical', 'optical', 'pharmacy', 'pharmacy')
 department_unique <- c('1-hr photo',
                        'accessories',
