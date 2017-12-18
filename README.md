@@ -19,6 +19,7 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 - [Feature Engineering](feature-engineering)
 - [Transform](#transform)
 - [Selection/Filtering](#selection/filtering)
+- [Reduction of dimensionality] (#reduction-of-dimensionality)
 - [Pipeline Prediction](#pipeline-prediction)
 - [Measurement](#measurement)
 
@@ -105,6 +106,9 @@ For those transformed variables,we applied the mean value to those new variables
 Once the data set had new variables, and transformed variables, it was eliminated "redundant" rows. Using the *gropu_by* function in pandas, se had one row per _VisitNumber_, also, it was eliminated the variables _ScanCount_ and _Upc_, because those variables were represented in new _num items_ and _num purchased_ variables.
 
 The final data_frame, the input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
+
+### Reduction of dimensionality
+Before data used in machine learning algorithms, it was transformed to a lower dimensionality usin PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
 
 ### Pipeline Prediction
 In this part, it was depeveloped a "magic loop", which tested many models with differerent hiperparameters. 
