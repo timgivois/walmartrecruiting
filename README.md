@@ -102,9 +102,21 @@ Two variables were transformed using the 'one-hot encoding' method (*pandas.get_
 For those transformed variables,we applied the mean value to those new variables, gruped by _VisitNumber_ in order to get the same value per row (at the end, we want a dataset where each row corresponds to a single VisitNumber).
 
 ### Selection/Filtering
-Once the data set had new variables, and transformed variables, it was eliminated "redundant" rows. Using the *gropu_by* funcion in pandas, se had one row per _VisitNumber_, also, it was eliminated the variables _ScanCount_ and _Upc_, because those variables were represented in new _num items_ and _num purchased_ variables.
+Once the data set had new variables, and transformed variables, it was eliminated "redundant" rows. Using the *gropu_by* function in pandas, se had one row per _VisitNumber_, also, it was eliminated the variables _ScanCount_ and _Upc_, because those variables were represented in new _num items_ and _num purchased_ variables.
 
 The final data_frame, the input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
 
 ### Pipeline Prediction
+In this part, it was depeveloped a "magic loop", which tested many models with differerent hiperparameters. 
+At the end of that script, in a python notebook, results are showed. Models and their hiper-parameters were sorted according to their performance with training data.  
+
+Some models in the pipeline are:
+- Random Forest
+- Logistic Regression
+- Extra Trees
+- Ada Boost
+- Support Vector Classifiers
+- Multinomial Naive Bayes
+- K neareset neightbor
+
 ### Measurement
