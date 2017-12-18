@@ -1,10 +1,14 @@
+source('src/02-clean.R')
+library(feather)
+
+
 train_data %>%
   group_by(VisitNumber) %>%
-  dplyr::summarise(counts=n()) %>%
+  summarise(counts=n()) %>%
   arrange(counts) %>%
   mutate(VisitNumber = factor(VisitNumber, VisitNumber)) %>%
   ggplot(aes(x=VisitNumber, y=counts)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat='identity') +
   coord_flip() +
   theme(text = element_text(size=8),
         axis.text.x = element_text(angle=90, hjust=1)) 
@@ -12,7 +16,7 @@ train_data %>%
 
 train_data %>%
   group_by(VisitNumber) %>%
-  dplyr::summarise(counts=n()) %>%
+  summarise(counts=n()) %>%
   filter(counts > 10) %>%
   mutate(numberItems = counts) %>%
   select(numberItems)
@@ -27,8 +31,6 @@ tmp <- seq(1, length(aux$DepartmentDescription %>% unique()))
 names(tmp) <- aux$DepartmentDescription %>% unique()
 
 aux <- aux %>% mutate(temp = tmp[DepartmentDescription])
-#aux <- aux %>% mutate(numDepartmentDescription = tmp[DepartmentDescription])
-
 
 aux  %>% filter(temp < 10) %>%
   ggplot(aes(x=temp, y=FinelineNumber, color = DepartmentDescription)) + 
@@ -52,8 +54,9 @@ temp2 <- train_data %>%
 
 print(temp2 %>% dim())
 
-aux <- merge(temp, temp2, by="VisitNumber")
+aux <- merge(temp, temp2, by='VisitNumber')
 rm(temp, temp2)
 
-transformed <- merge(train_data, aux, by="VisitNumber")
+transformed <- merge(train_data, aux, by='VisitNumber')
 
+write_feather(transformed, 'data/train_data_tidy.rds')
