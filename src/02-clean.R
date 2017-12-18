@@ -1,4 +1,5 @@
 source('src/01-prepare.R')
+source('src/metadata.R')
 
 train_data <- train_data %>% 
                 mutate_at(vars(TripType, VisitNumber, Upc, FinelineNumber, DepartmentDescription, Weekday), funs(as.factor))
@@ -30,9 +31,8 @@ na_train_data <- train_data[!complete.cases(train_data),]
 head(na_train_data)
 
 
-
 ###############################
-###---imputando con missing data
+###---imputando missing data con missForest
 library(missForest)
 temp <- train_data %>% select(TripType, Weekday, ScanCount, DepartmentDescription) %>% 
   mutate(DepartmentDescription = replace(DepartmentDescription, DepartmentDescription=="null", NA)) %>%
@@ -41,12 +41,11 @@ temp <- train_data %>% select(TripType, Weekday, ScanCount, DepartmentDescriptio
 temp[!complete.cases(temp),]
 temp %>% filter(DepartmentDescription == "null")
 
-####
-
 train_data.imp <- missForest(data.frame(select(temp, c(TripType, ScanCount, DepartmentDescription)))) 
 
-train_data_imputado <- DMwR::knnImputation(temp, k=3)  # perform knn imputation.
-anyNA(knnOutput)
+train_data <- train_data.imp$ximp
+anyNA(train_data)
+
 ########################################
 plotDepartment <- function(data, column="DepartmentDescription"){
   aux <- data %>% select(column) %>% table()
@@ -61,11 +60,24 @@ plotDepartment <- function(data, column="DepartmentDescription"){
   #reset settings
   par(op)
 }
-plotDepartment(train_data_imputado)
+plotDepartment(train_data)
 
-summary(train_data_imputado)
+summary(train_data)
 summary(test_data)
 
+# New categorization for department
+train_data <- train_data %>% 
+    mutate(DepartmentDescription = plyr::mapvalues(DepartmentDescription, unclean_department, clean_department))
+
+train_data <- train_data %>% 
+  mutate(DepartmentGroup = plyr::mapvalues(DepartmentDescription, department_unique, groups_department))
+
+
+test_data <- test_data %>% 
+  mutate(DepartmentDescription = plyr::mapvalues(DepartmentDescription, unclean_department, clean_department))
+
+test_data <- test_data %>% 
+  mutate(DepartmentGroup = plyr::mapvalues(DepartmentDescription, department_unique, groups_department))
 
 saveRDS(train_data, 'data/train_data_tidy.rds')
 saveRDS(test_data, 'data/test_data_tidy.rds')
