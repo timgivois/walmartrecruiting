@@ -12,7 +12,8 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 ## Table of Contents  
 [Challenge description](#challenge-description)  
 [Data Fields](#data-fields)  
-
+[Used Methods](#used-methods)
+[Cleaning](#cleaning)
 
 ## Challenge description
 For this competition, the objective is categorize shopping trip types based on the items that customers purchased. To understand better what a trip type is: a customer may make a small daily dinner trip, a weekly large grocery trip, a trip to buy gifts for an upcoming holiday, or a seasonal trip to buy clothes.
@@ -31,4 +32,15 @@ ScanCount |  the number of the given item that was purchased. A negative value i
 DepartmentDescription |  a high-level description of the item's department
 FinelineNumber | a more refined category for each of the products, created by Walmart
 
-##
+## Used Methods
+We used the following methods for this project:
+
+### Cleaning
+### Exploratory data analysis
+### Imputation
+### Transform
+### Feature Engineering
+### Selection
+### Filtering
+### Pipeline Prediction
+### Measurement
