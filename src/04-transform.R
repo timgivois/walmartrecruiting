@@ -59,4 +59,4 @@ rm(temp, temp2)
 
 transformed <- merge(train_data, aux, by='VisitNumber')
 
-write_feather(transformed, 'data/transformed_data.rds')
+write_feather(transformed, 'data/transformed_data.feather')
