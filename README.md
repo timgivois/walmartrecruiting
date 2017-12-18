@@ -3,11 +3,11 @@
 
 Authors:
 
- - Timoth??e Givois M. ([@timgivois](https://github.com/timgivois))
+ - Timothée Givois M. ([@timgivois](https://github.com/timgivois))
  - Farid Oroz ([@farid7](https://github.com/farid7))
 
 
-This project was taken from kaggle competion [site](https://www.kaggle.com/c/walmart-recruiting-trip-type-classification), we implemented a random forest algorithm, that had .96 accuracy. 
+This project was taken from kaggle competion [site](https://www.kaggle.com/c/walmart-recruiting-trip-type-classification),  and the submission result was: ....
 
 ## Table of Contents  
 [Challenge description](#challenge-description)  
@@ -36,8 +36,19 @@ FinelineNumber | a more refined category for each of the products, created by Wa
 We used the following methods for this project:
 
 ### Cleaning
+Data was downloaded in csv format, which had 4,129 missin data in columns _Upc_ and _FinelineNumber_.
+First off, the function *clean_colnames* formated all headers of the file (removed empty spaces and simbols),
+then, the function *clean_data* formated string in observation, to lower case. 
+   Used functions are in the -util.R- script.
 ### Exploratory data analysis
 ### Imputation
+1,492 rows have missin data, under the columns _Upc_ and _FinelineNumber_; maybe, it is because those 
+products are note registered in the database (correlation of 1 between those missing columns). 
+
+Missin data was imputed using the library *MissForest* in *R*.
+
+The code for this part is in the *02-clean.R* script.
+
 ### Transform
 ### Feature Engineering
 ### Selection
