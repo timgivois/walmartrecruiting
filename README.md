@@ -16,9 +16,9 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 - [Cleaning](#cleaning)
 - [Exploratory data analysis](#exploratory-data-analysis)
 - [Imputation](#imputation)
-- [Transform](#transform)
 - [Feature Engineering](feature-engineering)
-- [Selection/Filtering](#selection)
+- [Transform](#transform)
+- [Selection/Filtering](#selection/filtering)
 - [Pipeline Prediction](#pipeline-prediction)
 - [Measurement](#measurement)
 
