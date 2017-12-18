@@ -43,8 +43,12 @@ temp %>% filter(DepartmentDescription == "null")
 
 train_data.imp <- missForest(data.frame(select(temp, c(TripType, ScanCount, DepartmentDescription)))) 
 
-train_data <- train_data.imp$ximp
-anyNA(train_data)
+train_data_imputado <- train_data.imp$ximp %>%
+  mutate(ScanCount= as.integer(ScanCount))
+
+train_data$TripType <-train_data_imputado$TripType
+train_data$ScanCount <- train_data_imputado$ScanCount
+train_data$DepartmentDescription <- train_data_imputado$DepartmentDescription
 
 ########################################
 plotDepartment <- function(data, column="DepartmentDescription"){
