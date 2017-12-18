@@ -1,6 +1,6 @@
 source('src/02-clean.R')
 library(feather)
-
+train_data <- readRDS("data/train_data_tidy.rds")
 
 train_data %>%
   group_by(VisitNumber) %>%
