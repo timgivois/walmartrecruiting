@@ -22,7 +22,7 @@ head(x)
 # Extrae las variables que tienen algunas celdas con NAs
 y <- x[which(sapply(x, sd) > 0)] 
 
-# Da la correación un valor alto positivo significa que desaparecen juntas.
+# Da la correaci??n un valor alto positivo significa que desaparecen juntas.
 cor(y) 
 
 #saving data with missing values
@@ -45,7 +45,7 @@ temp %>% filter(DepartmentDescription == "null")
 
 train_data.imp <- missForest(data.frame(select(temp, c(TripType, ScanCount, DepartmentDescription)))) 
 
-temp <- DMwR::knnImputation(temp, k=3)  # perform knn imputation.
+train_data_imputado <- DMwR::knnImputation(temp, k=3)  # perform knn imputation.
 anyNA(knnOutput)
 ########################################
 plotDepartment <- function(data, column="DepartmentDescription"){
@@ -61,9 +61,9 @@ plotDepartment <- function(data, column="DepartmentDescription"){
   #reset settings
   par(op)
 }
-plotDepartment(temp)
+plotDepartment(train_data_imputado)
 
-summary(train_data)
+summary(train_data_imputado)
 summary(test_data)
 
 
