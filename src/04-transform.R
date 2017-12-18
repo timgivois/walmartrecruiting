@@ -60,3 +60,38 @@ rm(temp, temp2)
 transformed <- merge(train_data, aux, by='VisitNumber')
 
 write_feather(transformed, 'data/transformed_data.feather')
+
+
+
+### AHORA PARA TEST
+##########################
+aux <- test_data %>% select(DepartmentDescription, FinelineNumber)
+
+aux <- aux %>% group_by(DepartmentDescription)
+tmp <- seq(1, length(aux$DepartmentDescription %>% unique()))
+names(tmp) <- aux$DepartmentDescription %>% unique()
+
+aux <- aux %>% mutate(temp = tmp[DepartmentDescription])
+
+
+#########################
+#creating new variables
+temp <- test_data %>% 
+  #head(10000) %>% 
+  group_by(VisitNumber) %>% 
+  summarise(numItems=n())
+
+print(dim(temp))
+
+temp2 <- test_data %>% 
+  group_by(VisitNumber) %>%
+  summarise(num_purchased = sum(ScanCount))
+
+
+print(temp2 %>% dim())
+
+aux <- merge(temp, temp2, by='VisitNumber')
+rm(temp, temp2)
+
+transformed_test <- merge(test_data, aux, by='VisitNumber')
+write_feather(transformed_test, 'data/test_transformed_data.feather')

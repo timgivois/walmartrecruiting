@@ -3,11 +3,11 @@
 
 Authors:
 
- - Timothée Givois M. ([@timgivois](https://github.com/timgivois))
+ - Timoth??e Givois M. ([@timgivois](https://github.com/timgivois))
  - Farid Oroz ([@farid7](https://github.com/farid7))
 
 
-This project was taken from kaggle competion [site](https://www.kaggle.com/c/walmart-recruiting-trip-type-classification),  and the submission result was: ....
+This project was taken from kaggle competion [site](https://www.kaggle.com/c/walmart-recruiting-trip-type-classification), we implemented a random forest algorithm, that had .96 accuracy. 
 
 ## Table of Contents  
 [Challenge description](#challenge-description)  
