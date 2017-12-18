@@ -37,6 +37,26 @@ We used the following methods for this project:
 
 ### Cleaning
 ### Exploratory data analysis
+In this part, a visual analysis of univariate and bivariate data was made. It was easy appreciated that
+_TripType_ 49 and 39 are the most common among others. Also, the most common days for buyers is 
+_Sunday_ and _Saturday_; the day less "bussy" is Thursday.
+
+Regarding to the _DepartmentDescription_, the quantiti of purchased items decay exponentially, and the three 
+most common items are from _grocery dry  goods, dsd grocery_ and _produce_ departments. The most common 
+quantiti of purchased items (independently of their department) is _1, 2_ and _-1_ items (returned). The most 
+common product is categorized into _5501_ _FinelineNumber_.
+
+The _VisitNumber_ is usually repeated in the dataset. It is because one person buys different items, so, 
+there is an observation for each purchased (or returned) item. Onle two visitors treaded more than 150 items.
+
+The most commom product has the _Upc_ of 4011. 
+
+On the other hand, under the bivariate analysis, it seems that the _TripType_ of 40 is related to commonly
+used products (e.g. from _grocery, grocery dry goods_ and _personal care_ departments). Also, on Sundays,
+There is more variance in the quantity of purchased items.
+
+The datased is plotted in the 03-eda.Rmd file. 
+
 ### Imputation
 ### Transform
 ### Feature Engineering
