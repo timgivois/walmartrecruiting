@@ -36,6 +36,10 @@ FinelineNumber | a more refined category for each of the products, created by Wa
 We used the following methods for this project:
 
 ### Cleaning
+Data was downloaded in csv format, which had 4,129 missin data in columns _Upc_ and _FinelineNumber_.
+First off, the function *clean_colnames* formated all headers of the file (removed empty spaces and simbols),
+then, the function *clean_data* formated string in observation, to lower case. 
+   Used functions are in the -util.R- script.
 ### Exploratory data analysis
 ### Imputation
 ### Transform
