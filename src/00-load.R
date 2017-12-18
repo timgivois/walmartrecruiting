@@ -5,7 +5,7 @@ setwd("~/personal/walmartrecruiting")
 source("src/metadata.R", local=T)
 source("src/utils.R")
 
-required_packages <- c('tidyverse', 'readr')
+required_packages <- c('tidyverse', 'readr', 'feather')
 
 lapply(required_packages, install_if_not_exists)
 

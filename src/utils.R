@@ -1,4 +1,4 @@
-install_if_not_exists <- function(package) {
+  install_if_not_exists <- function(package) {
   if(!eval(parse(text=paste("require(",package,")")))){
     install.packages(package, dependencies = TRUE)
   }
