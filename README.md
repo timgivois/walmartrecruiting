@@ -108,7 +108,7 @@ Once the data set had new variables, and transformed variables, it was eliminate
 The final data_frame, the input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
 
 ### Reduction of dimensionality
-Before data used in machine learning algorithms, it was transformed to a lower dimensionality usin PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
+Before data used in machine learning algorithms, it was transformed to a lower dimensionality using PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
 
 ### Pipeline Prediction
 In this part, it was depeveloped a "magic loop", which tested many models with differerent hiperparameters. 
