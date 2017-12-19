@@ -111,7 +111,12 @@ Once the data set had new variables, for transforming variables we eliminated "r
 Before the data was used in machine learning algorithms, we transformed it to a lower dimensionality using PCA, in preserving the "most" important features of data, and decrease training time of algorithms.   
 
 ### Pipeline Prediction
+
+Models and their hiper-parameters were sorted according to their performance with training data.
+
 In this part, we developed a "magic loop" that tested many models with different hiperparameters. After this magic loop, we had models and their corresponding hiperparameters sorted according to their performance with training data.  
+(**not all models were tested because they may be too slow for this**).  
+
 
 Some models in the pipeline were:
 - Random Forest
@@ -122,4 +127,16 @@ Some models in the pipeline were:
 - Multinomial Naive Bayes
 - K nearest neighbor
 
+Outside the script with pipeline of models and  hyperparameters, we tried an XGBoost model using raw data and transformed data. 
+
+The XGBoost with transformed data had our the best accuracy score, with 61%. The parameters and hyperparameters used are described below:
+
+ _num_round = 50_
+ _param = {'objective': 'multi:softmax', 'num_class':len(set(mytrain.TripType_l)), 
+      'eval_metric': 'mlogloss', "max_delta_step": 1}_
+ _watchlist = [(dtrain,'train'), (dtest, 'eval')]_
+
+_%time bst = xgb.train(param, dtrain, num_round, watchlist,early_stopping_rounds=3)_
+
 ### Measurement
+Accuracy is the metric used
