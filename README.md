@@ -22,6 +22,7 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 - [Reduction of dimensionality](#reduction-of-dimensionality)
 - [Pipeline Prediction](#pipeline-prediction)
 - [Measurement](#measurement)
+- [Data Lineage] (data-lineage)
 
 ## Challenge description
 For this competition, the objective is categorize shopping trip types based on the items that customers purchased. To understand better what a trip type is: a customer may make a small daily dinner trip, a weekly large grocery trip, a trip to buy gifts for an upcoming holiday, or a seasonal trip to buy clothes.
@@ -156,3 +157,9 @@ than 10 hours, and they get a score below 2). On the other hand, statistical dis
 
 Our main goal was to find new features that describe the data set in a better way, in order to 
 decrease the training time of algorithms, and improving their performance. 
+
+### Data Lineage
+All modified data during this process can be find in the _data_ folder, in this git-hub. 
+- **train.csv**.- This file is the raw_data, downloaded from Kaggle.
+- **train.rds**.- This file is created in R, and has the formated data ("clean" observations and column names). 
+- **train.feather**.- This file has new features or variables (transformed data), and can be opened by other programming languages (e.g. Python).
