@@ -62,3 +62,10 @@ train_data$ScanCount <- train_data_imputado$ScanCount
 train_data$DepartmentDescription <- train_data_imputado$DepartmentDescription
 
 
+#######################################
+###---Saving new data in RDS format (Data linage)
+#########################################
+saveRDS(train_data, 'data/train_data_tidy.rds')
+saveRDS(test_data, 'data/test_data_tidy.rds')
+
+
