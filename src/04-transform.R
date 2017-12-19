@@ -1,45 +1,52 @@
 source('src/02-clean.R')
 library(feather)
 
-
-train_data %>%
-  group_by(VisitNumber) %>%
-  summarise(counts=n()) %>%
-  arrange(counts) %>%
-  mutate(VisitNumber = factor(VisitNumber, VisitNumber)) %>%
-  ggplot(aes(x=VisitNumber, y=counts)) +
-  geom_bar(stat='identity') +
-  coord_flip() +
-  theme(text = element_text(size=8),
-        axis.text.x = element_text(angle=90, hjust=1)) 
-
-
-train_data %>%
-  group_by(VisitNumber) %>%
-  summarise(counts=n()) %>%
-  filter(counts > 10) %>%
-  mutate(numberItems = counts) %>%
-  select(numberItems)
-   
-transformed <- train_data 
-
-##########################
-aux <- train_data %>% select(DepartmentDescription, FinelineNumber)
-
-aux <- aux %>% group_by(DepartmentDescription)
-tmp <- seq(1, length(aux$DepartmentDescription %>% unique()))
-names(tmp) <- aux$DepartmentDescription %>% unique()
-
-aux <- aux %>% mutate(temp = tmp[DepartmentDescription])
-
-aux  %>% filter(temp < 10) %>%
-  ggplot(aes(x=temp, y=FinelineNumber, color = DepartmentDescription)) + 
-  geom_point()
+#######################################
+###---Plot DepartmentDescription, to prepare transformation of data
+#########################################
+plotDepartment <- function(data, column="DepartmentDescription"){
+  aux <- data %>% select(column) %>% table()
+  
+  #save old settings
+  op <- par(no.readonly = TRUE)
+  #change settings
+  par(mar=c(8, 4, 2, 2) + 0.1)
+  plot(aux, type='h',
+       xaxt="n",main="", xlab ="")
+  axis(1, at=1:length(aux), labels=names(aux), las = 2, cex.axis = 0.8)
+  #reset settings
+  par(op)
+}
+plotDepartment(train_data)
 
 
+#######################################
+###---New Department Column (DepartmentGroup)
+#########################################
+train_data <- train_data %>% 
+  mutate(DepartmentDescription = plyr::mapvalues(DepartmentDescription, unclean_department, clean_department))
 
-#########################
-#creating new variables
+train_data <- train_data %>% 
+  mutate(DepartmentGroup = plyr::mapvalues(DepartmentDescription, department_unique, groups_department))
+
+
+test_data <- test_data %>% 
+  mutate(DepartmentDescription = plyr::mapvalues(DepartmentDescription, unclean_department, clean_department))
+
+test_data <- test_data %>% 
+  mutate(DepartmentGroup = plyr::mapvalues(DepartmentDescription, department_unique, groups_department))
+
+#######################################
+###---Saving new data in RDS format (Data linage)
+#########################################
+saveRDS(train_data, 'data/train_data_tidy.rds')
+saveRDS(test_data, 'data/test_data_tidy.rds')
+
+###########################################
+###---  Creating new variables
+##########################################
+
+#how many different items per VisitNumber
 temp <- train_data %>% 
   #head(10000) %>% 
   group_by(VisitNumber) %>% 
@@ -47,34 +54,30 @@ temp <- train_data %>%
 
 print(dim(temp))
 
+#How many purchased items per VisitNumber
 temp2 <- train_data %>% 
   group_by(VisitNumber) %>%
   summarise(num_purchased = sum(ScanCount))
   
-
 print(temp2 %>% dim())
 
+#Merging new variables with main dataframe
 aux <- merge(temp, temp2, by='VisitNumber')
 rm(temp, temp2)
 
 transformed <- merge(train_data, aux, by='VisitNumber')
 
+########################################
+###--- Saving new transformed data (data linage)
+#########################################
 write_feather(transformed, 'data/transformed_data.feather')
 
 
 
-### AHORA PARA TEST
-##########################
-aux <- test_data %>% select(DepartmentDescription, FinelineNumber)
+###############################
+### Same procedure for Test data
+###############################
 
-aux <- aux %>% group_by(DepartmentDescription)
-tmp <- seq(1, length(aux$DepartmentDescription %>% unique()))
-names(tmp) <- aux$DepartmentDescription %>% unique()
-
-aux <- aux %>% mutate(temp = tmp[DepartmentDescription])
-
-
-#########################
 #creating new variables
 temp <- test_data %>% 
   #head(10000) %>% 
@@ -86,7 +89,6 @@ print(dim(temp))
 temp2 <- test_data %>% 
   group_by(VisitNumber) %>%
   summarise(num_purchased = sum(ScanCount))
-
 
 print(temp2 %>% dim())
 
