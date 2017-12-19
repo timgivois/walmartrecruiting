@@ -45,13 +45,20 @@ We used the following methods for this project:
 
 ### Cleaning
 Data was downloaded in csv format which had 4,129 missing data points in columns _Upc_ and _FinelineNumber_.
-First off, the function *clean_colnames* formatted all headers of the file (removed empty spaces and symbols),
-then, the function *clean_data* formatted string of the observation, converting them to lower case. Used functions are in the -util.R- script.
+First off, the function *clean_colnames* formatted all headers of the file (removed empty spaces and symbols).
+then, the function *clean_data* formatted string of the observation, converting them to lower case. Used functions are in the *util.R* script.
+
+   
+### Exploratory data analysis
+In this part, a visual analysis of univariate and bivariate data was made. It was easy appreciated that
+_TripType_ 49 and 39 are the most common among others. Also, the most common days for customers are _Sunday_ and _Saturday_; the less "busy" day is Thursday.
+
 
 ### Exploratory data analysis
 In this part, a visual analysis of univariate and bivariate data was made. It can be easily appreciated that
 _TripType_ 49 and 39 are the most common among others. Also, the most common days for buyers are
 _Sunday_ and _Saturday_; the less "busy" day is Thursday.
+
 
 Regarding to the _DepartmentDescription_, the quantity of purchased items decay exponentially, and the three
 most common items are from _grocery dry  goods, dsd grocery_ and _produce_ departments. The most common
@@ -70,15 +77,14 @@ There is more variance in the quantity of purchased items.
 The dataset is plotted in 03-eda.Rmd file.
 
 ### Imputation
-1,492 rows have missing data, under the columns _Upc_ and _FinelineNumber_; maybe, it is because those
-products are not registered in the supermarket database (correlation of 1 between those missing columns).
-
-Missing data was imputed using the library *MissForest* in *R*.
-
-The code for this part is in *02-clean.R* script.
+1,492 rows have missing data, under _Upc_ and _FinelineNumber_ columns; maybe, it is because those
+products are not registered in the database (correlation of 1 between those missing columns).
+Missing data was imputed using the library **MissForest** in *R*.
+The code for this part is in the **02-clean.R** script.
 
 ### Feature Engineering
-For the feature engineering, we decided to rearrange groups for DepartmentDescription and also create DepartmentDescriptionGroups that are supposed to be more general and easier to create dummies from.
+For the feature engineering part, we decided to rearrange groups for DepartmentDescription and also create Department Description-Groups that are more general and easier when createing dummies variables.
+
 We defined 12 major groups for departments:
 - accessories
 - electronics
@@ -92,7 +98,6 @@ We defined 12 major groups for departments:
 - media and gaming
 - office
 - games
-
 At the end, these new categories have a similar distribution of items to the original categories of. We can check this code in in *02-clean.R* and in *metadata.R* script
 
 _DepartmentDescription_: As this variable is the most important and it represents a lot of information about the product, we decided to one-hot encode it for the models.
@@ -101,6 +106,7 @@ On the other hand, two new variables were created using _ScanCount_ and _VisitNu
 
 ### Transform
 Two variables were transformed using the 'one-hot encoding' method (*pandas.get_dummies*): _DepartmentGroup_ (description above) and _weekday_.
+
 
 For those transformed variables, we've applied the mean value to those new variables, grouped by _VisitNumber_ in order to get the same value per row (at the end, we want a dataset where each row corresponds to a single VisitNumber).
 
@@ -111,7 +117,12 @@ Once the data set had new variables, for transforming variables we eliminated "r
 Before the data was used in machine learning algorithms, we transformed it to a lower dimensionality using PCA, in preserving the "most" important features of data, and decrease training time of algorithms.   
 
 ### Pipeline Prediction
+
+Models and their hiper-parameters were sorted according to their performance with training data.
+
 In this part, we developed a "magic loop" that tested many models with different hiperparameters. After this magic loop, we had models and their corresponding hiperparameters sorted according to their performance with training data.  
+(**not all models were tested because they may be too slow for this**).  
+
 
 Some models in the pipeline were:
 - Random Forest
@@ -122,4 +133,16 @@ Some models in the pipeline were:
 - Multinomial Naive Bayes
 - K nearest neighbor
 
+Outside the script with pipeline of models and  hyperparameters, we tried an XGBoost model using raw data and transformed data. 
+
+The XGBoost with transformed data had our the best accuracy score, with 61%. The parameters and hyperparameters used are described below:
+
+ _num_round = 50_
+ _param = {'objective': 'multi:softmax', 'num_class':len(set(mytrain.TripType_l)), 
+      'eval_metric': 'mlogloss', "max_delta_step": 1}_
+ _watchlist = [(dtrain,'train'), (dtest, 'eval')]_
+
+_%time bst = xgb.train(param, dtrain, num_round, watchlist,early_stopping_rounds=3)_
+
 ### Measurement
+Accuracy is the metric used
