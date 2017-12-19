@@ -46,12 +46,12 @@ We used the following methods for this project:
 ### Cleaning
 Data was downloaded in csv format, which had 4,129 missing data in columns _Upc_ and _FinelineNumber_.
 First off, the function *clean_colnames* formatted all headers of the file (removed empty spaces and symbols),
-then, the function *clean_data* formatted string in observation, to lower case.
-   Used functions are in the -util.R- script.
+then, the function *clean_data* formatted strings in each observation, to lower case.
+   Used functions are in the **util.R** script.
+   
 ### Exploratory data analysis
 In this part, a visual analysis of univariate and bivariate data was made. It was easy appreciated that
-_TripType_ 49 and 39 are the most common among others. Also, the most common days for buyers is
-_Sunday_ and _Saturday_; the day less "busy" is Thursday.
+_TripType_ 49 and 39 are the most common among others. Also, the most common days for customers are _Sunday_ and _Saturday_; the less "busy" day is Thursday.
 
 Regarding to the _DepartmentDescription_, the quantity of purchased items decay exponentially, and the three
 most common items are from _grocery dry  goods, dsd grocery_ and _produce_ departments. The most common
@@ -70,15 +70,16 @@ There is more variance in the quantity of purchased items.
 The dataset is plotted in the 03-eda.Rmd file.
 
 ### Imputation
-1,492 rows have missing data, under the columns _Upc_ and _FinelineNumber_; maybe, it is because those
+1,492 rows have missing data, under _Upc_ and _FinelineNumber_ columns; maybe, it is because those
 products are note registered in the database (correlation of 1 between those missing columns).
 
-Missing data was imputed using the library *MissForest* in *R*.
+Missing data was imputed using the library **MissForest** in *R*.
 
-The code for this part is in the *02-clean.R* script.
+The code for this part is in the **02-clean.R** script.
 
 ### Feature Engineering
-For the feature engineering, we decided to rearrange groups for DepartmentDescription and also create DepartmentDescriptionGroups that are supposed to be more general and easier to create dummies from.
+For the feature engineering part, we decided to rearrange groups for DepartmentDescription and also create Department Description-Groups that are more general and easier when createing dummies variables.
+
 We defined 12 major groups for departments:
 - accessories
 - electronics
@@ -93,26 +94,26 @@ We defined 12 major groups for departments:
 - office
 - games
 
-At the end, these new categories have a similar distribution of items to the original categories of _DepartmentDescription_. 
+At the end, these new categories have a similar distribution of items, compared to original categories of _DepartmentDescription_. 
 
-On the other hand, two new variables were created using _ScanCount_ and _VisitNumber_ variables. Within _VisitNumber_ we identified how many different items were treated in that trip, creating the variable _numItems_,  and the variable _num_purchased_ is created by summing all the products in _ScanCount_ field. If the variable _num purchased_ is negative, it means that the client returned more items that those he/she bougth. 
+On the other hand, two new variables were created using _ScanCount_ and _Upc_ variables. Within _Upc_ we identified how many different items were treated in that trip, creating the variable _numItems_,  and the variable _num_purchased_ is created by adding all the products in _ScanCount_ field. If the variable _num purchased_ is negative, it means that the client returned more items that those he/she bougth. 
 
 ### Transform
 Two variables were transformed using the 'one-hot encoding' method (*pandas.get_dummies*): _DepartmentGroup_ (description above) and _weekday_. 
 
-For those transformed variables,we applied the mean value to those new variables, gruped by _VisitNumber_ in order to get the same value per row (at the end, we want a dataset where each row corresponds to a single VisitNumber).
+For those transformed variables,we applied the mean operator in those new variables, gruped by _VisitNumber_ in order to get the same value per row (at the end, we want a dataset where each row corresponds to a single VisitNumber).
 
 ### Selection/Filtering
-Once the data set had new variables, and transformed variables, it was eliminated "redundant" rows. Using the *gropu_by* function in pandas, se had one row per _VisitNumber_, also, it was eliminated the variables _ScanCount_ and _Upc_, because those variables were represented in new _num items_ and _num purchased_ variables.
+Once the data set had new variables, and transformed variables, "redundant" rows were eliminated. Using the **gropu_by** function in pandas. Finally, the data set had one row per _VisitNumber_, and also, _ScanCount_ and _Upc_ variables were eliminated because they were represented in new _num items_ and _num purchased_ variables created.
 
-The final data_frame, the input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
+The final data_frame, input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
 
 ### Reduction of dimensionality
-Before data used in machine learning algorithms, it was transformed to a lower dimensionality using PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
+Before data was used in machine learning algorithms, it was transformed to a lower dimensionality using PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
 
 ### Pipeline Prediction
 In this part, it was depeveloped a "magic loop", which tested many models with differerent hiperparameters. 
-At the end of that script, in a python notebook, results are showed. Models and their hiper-parameters were sorted according to their performance with training data.  
+At the end of that script, in a python notebook, results of their performance are showed. Models and their hiper-parameters were sorted according to their performance with training data.  
 
 Some models in the pipeline are:
 - Random Forest
