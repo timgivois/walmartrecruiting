@@ -145,4 +145,14 @@ The XGBoost with transformed data had our the best accuracy score, with 61%. The
 _%time bst = xgb.train(param, dtrain, num_round, watchlist,early_stopping_rounds=3)_
 
 ### Measurement
-Accuracy is the metric used
+Accuracy is the metric used in this project. 
+
+Most of our models reached an accuracy between 47% and 56%, despite XGBoost with 61%. 
+
+The conclusion of this work is that the accuracy can be improved using better features or changing 
+hyperparameters of models (for example, some people trained an XGBoost model with raw data for more 
+than 10 hours, and they get a score below 2). On the other hand, statistical distribution of data 
+(for example, TripType) makes that simple models cannot predict labels correctly for most of cases. 
+
+Our main goal was to find new features that describe the data set in a better way, in order to 
+decrease the training time of algorithms, and improving their performance. 
