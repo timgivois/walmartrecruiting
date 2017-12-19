@@ -36,11 +36,6 @@ test_data <- test_data %>%
 test_data <- test_data %>% 
   mutate(DepartmentGroup = plyr::mapvalues(DepartmentDescription, department_unique, groups_department))
 
-#######################################
-###---Saving new data in RDS format (Data linage)
-#########################################
-saveRDS(train_data, 'data/train_data_tidy.rds')
-saveRDS(test_data, 'data/test_data_tidy.rds')
 
 ###########################################
 ###---  Creating new variables
