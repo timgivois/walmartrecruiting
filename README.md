@@ -16,10 +16,10 @@ This project was taken from kaggle competion [site](https://www.kaggle.com/c/wal
 - [Cleaning](#cleaning)
 - [Exploratory data analysis](#exploratory-data-analysis)
 - [Imputation](#imputation)
-- [Transform](#transform)
 - [Feature Engineering](feature-engineering)
-- [Selection](#selection)
-- [Filtering](#filtering)
+- [Transform](#transform)
+- [Selection/Filtering](#selection/filtering)
+- [Reduction of dimensionality] (#reduction-of-dimensionality)
 - [Pipeline Prediction](#pipeline-prediction)
 - [Measurement](#measurement)
 
@@ -77,8 +77,6 @@ Missing data was imputed using the library *MissForest* in *R*.
 
 The code for this part is in the *02-clean.R* script.
 
-### Transform
-
 ### Feature Engineering
 For the feature engineering, we decided to rearrange groups for DepartmentDescription and also create DepartmentDescriptionGroups that are supposed to be more general and easier to create dummies from.
 We defined 12 major groups for departments:
@@ -94,7 +92,35 @@ We defined 12 major groups for departments:
 - media and gaming
 - office
 - games
-### Selection
-### Filtering
+
+At the end, these new categories have a similar distribution of items to the original categories of _DepartmentDescription_. 
+
+On the other hand, two new variables were created using _ScanCount_ and _VisitNumber_ variables. Within _VisitNumber_ we identified how many different items were treated in that trip, creating the variable _numItems_,  and the variable _num_purchased_ is created by summing all the products in _ScanCount_ field. If the variable _num purchased_ is negative, it means that the client returned more items that those he/she bougth. 
+
+### Transform
+Two variables were transformed using the 'one-hot encoding' method (*pandas.get_dummies*): _DepartmentGroup_ (description above) and _weekday_. 
+
+For those transformed variables,we applied the mean value to those new variables, gruped by _VisitNumber_ in order to get the same value per row (at the end, we want a dataset where each row corresponds to a single VisitNumber).
+
+### Selection/Filtering
+Once the data set had new variables, and transformed variables, it was eliminated "redundant" rows. Using the *gropu_by* function in pandas, se had one row per _VisitNumber_, also, it was eliminated the variables _ScanCount_ and _Upc_, because those variables were represented in new _num items_ and _num purchased_ variables.
+
+The final data_frame, the input for machine learning models, had one row per _Visit Number_ with one label _TripType_. 
+
+### Reduction of dimensionality
+Before data used in machine learning algorithms, it was transformed to a lower dimensionality using PCA, in order to preserve the "most" important features of data, and decrese training time of algorithms.   
+
 ### Pipeline Prediction
+In this part, it was depeveloped a "magic loop", which tested many models with differerent hiperparameters. 
+At the end of that script, in a python notebook, results are showed. Models and their hiper-parameters were sorted according to their performance with training data.  
+
+Some models in the pipeline are:
+- Random Forest
+- Logistic Regression
+- Extra Trees
+- Ada Boost
+- Support Vector Classifiers
+- Multinomial Naive Bayes
+- K neareset neightbor
+
 ### Measurement
